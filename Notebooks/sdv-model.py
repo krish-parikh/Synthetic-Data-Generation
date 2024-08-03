@@ -36,7 +36,10 @@ class SDG:
         self.real = data
         self.fake = None
         self.metadata = None
-        self.synthesizer = None
+        self.gcs = None
+        self.ctgan = None
+        self.gcs_gan = None
+        self.tvae = None
 
     def metadata(self):
         self.metadata = SingleTableMetadata()
@@ -49,18 +52,18 @@ class SDG:
         return self.real
     
     def GCS(self):
-        self.synthesizer = GaussianCopulaSynthesizer(metadata=self.metadata,
+        self.gcs = GaussianCopulaSynthesizer(metadata=self.metadata,
                                                      enforce_min_max_values=True,
                                                      enforce_rounding=False,
                                                      numerical_distributions={},
                                                      default_distribution='norm')
-        self.synthesizer.fit(self.real)
-        self.fake = self.synthesizer.sample(len(self.real))
+        self.gcs.fit(self.real)
+        self.fake = self.gcs.sample(len(self.real))
         print("Evaluation of the model: ", evaluate_quality(self.fake, self.real))
         return self.fake
 
     def CTGAN(self):
-        self.synthesizer = CTGANSynthesizer(metadata=self.metadata,
+        self.ctgan = CTGANSynthesizer(metadata=self.metadata,
                                             enforce_min_max_values=True,
                                             enforce_rounding=False,
                                             epochs=300,
@@ -76,11 +79,16 @@ class SDG:
                                             log_frequency=True,
                                             verbose=True,
                                             pac=10)
-        self.synthesizer.fit(self.real)
-
-    def T
-    
-
-        self.fake.fit(self.real)
-        self.fake = self.fake.sample(len(self.real))
+        self.ctgan.fit(self.real)
+        self.fake = self.ctgan.sample(len(self.real))
+        print("Evaluation of the model: ", evaluate_quality(self.fake, self.real))
         return self.fake
+    
+    def GCSGAN()
+    
+    def loss(self):
+        try:
+            fig = self.synthesizer.get_loss_values_plot()
+            fig.show()
+        except:
+            return "No loss available"
