@@ -1,4 +1,4 @@
-from sdv.single_table import GaussianCopulaSynthesizer, CTGANSynthesizer
+from sdv.single_table import GaussianCopulaSynthesizer, CTGANSynthesizer, TVAESynthesizer
 from sdv.evaluation.single_table import evaluate_quality
 from sdv.metadata import SingleTableMetadata
 
@@ -19,15 +19,16 @@ import pandas as pd
 # generator_dim: Tuple[int, int] = (256, 256) -> number of layers and the neurons in each layer of the generator
 # embedding_dim: int = 128 -> size of the random noise vector, increase to increase capacity of the model to learn complex patterns
 
-# discrinimnator_decay: float = 1e-6 -> decay rate of the discriminator learning rate
+# discrinimnator_decay: float = 1e-6 -> decay rate of the discriminator learning rate, adjust to regularize the model
 # generator_decay: float = 1e-6 -> decay rate of the generator learning rate
 
-# discriminator_lr: float = 2e-4 -> learning rate of the discriminator
+# discriminator_lr: float = 2e-4 -> learning rate of the discriminator, higher rates may speed up convergence but risk overshooting
 # generator_lr: float = 2e-4 -> learning rate of the generator
 
 # discriminator_steps: int = 1 -> number of discriminator updates per generator update, increase to improve stability
 
-# log_frequency: bool = True/False -> whether to use log frequency of categorical levels in conditional sampling.
+# log_frequency: bool = True/False -> whether to use log frequency of categorical levels in conditional sampling, True is for handling imbalanced categorical data by sampling more frequently from less frequent categories
+
 # pac: int = 10 -> number of samples to group together when applying the discriminator.
 
 
@@ -83,12 +84,12 @@ class SDG:
         self.fake = self.ctgan.sample(len(self.real))
         print("Evaluation of the model: ", evaluate_quality(self.fake, self.real))
         return self.fake
-    
-    def GCSGAN()
-    
+        
     def loss(self):
         try:
             fig = self.synthesizer.get_loss_values_plot()
             fig.show()
         except:
             return "No loss available"
+        
+        
